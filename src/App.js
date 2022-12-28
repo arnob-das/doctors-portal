@@ -7,12 +7,12 @@ import Login from './Pages/Login/Login';
 
 function App() {
   return (
-    <div>
-      <Navbar/>
+    <div className="lg:px-12 px-4">
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home></Home>} />
-        <Route path="/about" element={<About/>} />
-        <Route path="/login" element={<Login/>} />
+        <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );
