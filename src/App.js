@@ -7,10 +7,10 @@ import Login from './Pages/Login/Login';
 
 function App() {
   return (
-    <div className="lg:px-12 px-4">
+    <div className="">
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home></Home>} />
+        <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
       </Routes>
