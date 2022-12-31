@@ -26,29 +26,13 @@ const ContactUsHome = () => {
                             <label htmlFor="email-address" className="sr-only">
                                 Email address
                             </label>
-                            <input
-                                id="email-address"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="relative block w-full appearance-none rounded rounded-t-md border border-secondary-300 px-3 py-2 text-gray-900 placeholder-accent-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Email address"
-                            />
+                            <input type="text" placeholder="Email Address" className="input input-bordered input-primary w-full" />
                         </div>
                         <div className='py-4'>
                             <label htmlFor="password" className="sr-only">
                                 Subject
                             </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="text"
-                                autoComplete="text"
-                                required
-                                className="relative block w-full appearance-none rounded rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Subject"
-                            />
+                            <input type="text" placeholder="Subject" className="input input-bordered input-primary w-full" />
                         </div>
                         <div className='py-4'>
                             <label htmlFor="password" className="sr-only">

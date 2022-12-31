@@ -1,7 +1,6 @@
 import React from 'react';
 
 const Review = ({ name, image, location, review }) => {
-    console.log(image.people1);
     return (
         <div className="card max-w-lg shadow-xl">
             <div className="card-body">

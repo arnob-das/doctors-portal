@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 const Navbar = () => {
 
     const menuItems = <>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/" href>Home</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/about" href>About</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/appointment" href>Appointment</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/reviews" href>Reviews</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/contact" href>Contact Us</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/login" href>Login</Link></li>
+        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/">Home</Link></li>
+        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/about">About</Link></li>
+        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/appointment">Appointment</Link></li>
+        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/reviews">Reviews</Link></li>
+        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/contact">Contact Us</Link></li>
+        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/login">Login</Link></li>
     </>
 
     return (
@@ -23,7 +23,7 @@ const Navbar = () => {
                         {menuItems}
                     </ul>
                 </div>
-                <a className="btn btn-ghost normal-case text-xl" href>Doctors Portal</a>
+                <Link className="btn btn-ghost normal-case text-xl" to="/home">Doctors Portal</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
