@@ -3,7 +3,7 @@ import React from 'react';
 
 const BookingModal = ({ treatment, date,setTreatment }) => {
 
-    const {_id,name,slots,set } = treatment;
+    const {_id,name,slots } = treatment;
 
     const handleBooking=event=>{
         event.preventDefault();

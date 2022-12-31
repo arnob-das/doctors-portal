@@ -19,7 +19,7 @@ const ServiceCard = ({ service, setTreatment }) => {
                 </p>
                 <p className="py-1">{slots.length} {space} Available</p>
                 <label
-                    className="btn btn-secondary text-white"
+                    className="btn btn-sm btn-primary text-white bg-gradient-to-r from-secondary bg-gradient-to-primary"
                     htmlFor="booking-modal"
                     onClick={() => setTreatment(service)}
                     disabled={slots.length === 0}
