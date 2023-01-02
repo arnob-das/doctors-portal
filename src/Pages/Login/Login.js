@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth'
 import auth from '../../firebase.init';
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 
 const Login = () => {
@@ -10,6 +11,7 @@ const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+
 
     const [
         signInWithEmailAndPassword,
@@ -21,24 +23,29 @@ const Login = () => {
     let signInError;
 
     const navigate = useNavigate();
+    const location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+
+    useEffect(() => {
+        if (gUser || eUser) {
+            navigate(from, { replace: true });
+
+        }
+    }, [gUser, eUser, navigate, from, location])
+
 
     if (gError || eError) {
         signInError = <p className='text-red-500 text-sm'>{gError?.message || eError?.message}</p>;
     }
 
     if (gLoading || eLoading) {
-        return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Checking</button></div>
+        return <LoadingSpinner text="Processing..." />
     }
 
-    if (gUser || eUser) {
-        console.log(gUser || eUser);
-    }
+
 
     const onSubmit = async (data) => {
-        const success = await signInWithEmailAndPassword(data.email, data.password);
-        if (success) {
-            navigate("/appointment");
-        }
+        await signInWithEmailAndPassword(data.email, data.password);
     };
 
 

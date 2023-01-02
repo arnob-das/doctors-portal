@@ -12,13 +12,24 @@ const Navbar = () => {
 
     const navigate = useNavigate();
 
-    const logOut = async() => {
-        await signOut(auth);
-        navigate("/");
+    if (userError || signOutError) {
+        return <p className='text-red-500 text-sm'>{userError?.message || signOutError?.message}</p>;
     }
 
-    console.log(auth);
+    if (signOutLoading) {
+        return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Processing</button></div>
+    }
 
+
+    // it displays a loader while refreshing the page every time for a short time for the ""userLoading"" variable
+    // if (userLoading || signOutLoading) {
+    //     return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Processing</button></div>
+    // }
+
+
+    const logOut = async () => {
+        await signOut(auth);
+    }
 
     const menuItems = <>
         <li className="hover:bg-accent hover:text-white"><Link to="/">Home</Link></li>
@@ -26,6 +37,13 @@ const Navbar = () => {
         <li className="hover:bg-accent hover:text-white"><Link to="/appointment">Appointment</Link></li>
         <li className="hover:bg-accent hover:text-white"><Link to="/reviews">Reviews</Link></li>
         <li className="hover:bg-accent hover:text-white"><Link to="/contact">Contact Us</Link></li>
+        {
+            user &&
+            <li className="hover:bg-accent hover:text-white">
+                <Link to="/profile">{user?.displayName}</Link>
+            </li>
+
+        }
         <li className="hover:bg-accent hover:text-white">
             {user
                 ?
