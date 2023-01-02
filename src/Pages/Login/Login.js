@@ -2,7 +2,7 @@ import React from 'react';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth'
 import auth from '../../firebase.init';
 import { useForm } from "react-hook-form";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
@@ -10,7 +10,6 @@ const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
-
 
     const [
         signInWithEmailAndPassword,
@@ -21,11 +20,13 @@ const Login = () => {
 
     let signInError;
 
-    if(gError || eError) {
+    const navigate = useNavigate();
+
+    if (gError || eError) {
         signInError = <p className='text-red-500 text-sm'>{gError?.message || eError?.message}</p>;
     }
 
-    if (gLoading ||  eLoading) {
+    if (gLoading || eLoading) {
         return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Checking</button></div>
     }
 
@@ -33,8 +34,11 @@ const Login = () => {
         console.log(gUser || eUser);
     }
 
-    const onSubmit = (data) => {
-        signInWithEmailAndPassword(data.email, data.password);
+    const onSubmit = async (data) => {
+        const success = await signInWithEmailAndPassword(data.email, data.password);
+        if (success) {
+            navigate("/appointment");
+        }
     };
 
 
@@ -111,7 +115,7 @@ const Login = () => {
                         <input className='btn btn-accent w-full max-w-xs text-white' type="submit" value="Login" />
                     </form>
                     {/* Login Form Ends */}
-                    <p className='text-sm mt-2 text-center'>New To Doctors Portal? <Link className="text-secondary"to="/signup">Create New Account</Link></p>
+                    <p className='text-sm mt-2 text-center'>New To Doctors Portal? <Link className="text-secondary" to="/signup">Create New Account</Link></p>
                     <div className="divider">OR</div>
                     <button onClick={() => signInWithGoogle()} className="btn btn-outline btn-accent">Continue With Google</button>
                 </div>

@@ -1,15 +1,43 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import auth from '../../firebase.init';
+import { useSignOut } from 'react-firebase-hooks/auth';
+
 
 const Navbar = () => {
 
+    const [user, userLoading, userError] = useAuthState(auth);
+    const [signOut, signOutLoading, signOutError] = useSignOut(auth);
+
+    const navigate = useNavigate();
+
+    const logOut = async() => {
+        await signOut(auth);
+        navigate("/");
+    }
+
+    console.log(auth);
+
+
     const menuItems = <>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/">Home</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/about">About</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/appointment">Appointment</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/reviews">Reviews</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/contact">Contact Us</Link></li>
-        <li className="hover:bg-accent hover:text-white duration-300"><Link to="/login">Login</Link></li>
+        <li className="hover:bg-accent hover:text-white"><Link to="/">Home</Link></li>
+        <li className="hover:bg-accent hover:text-white"><Link to="/about">About</Link></li>
+        <li className="hover:bg-accent hover:text-white"><Link to="/appointment">Appointment</Link></li>
+        <li className="hover:bg-accent hover:text-white"><Link to="/reviews">Reviews</Link></li>
+        <li className="hover:bg-accent hover:text-white"><Link to="/contact">Contact Us</Link></li>
+        <li className="hover:bg-accent hover:text-white">
+            {user
+                ?
+                <Link
+                    onClick={() => logOut()}
+                    className='btn btn-ghost'
+                >
+                    Logout
+                </Link>
+                :
+                <Link to="/login">Login</Link>}
+        </li>
     </>
 
     return (
