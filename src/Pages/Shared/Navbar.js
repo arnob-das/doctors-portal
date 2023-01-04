@@ -40,7 +40,7 @@ const Navbar = () => {
         {
             user &&
             <li className="hover:bg-accent hover:text-white">
-                <Link to="/profile">{user?.displayName}</Link>
+                <Link to="/profile">{user?.displayName || "Profile"}</Link>
             </li>
 
         }

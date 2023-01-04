@@ -1,62 +1,53 @@
 import React from 'react';
-import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
+import { useAuthState, useUpdateEmail, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import auth from '../../firebase.init';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
-const ForgotPassword = () => {
-    const navigate = useNavigate();
+
+const Profile = () => {
+    const [updateProfile, updatingProfile, updateProfileError] = useUpdateProfile(auth);
+    const [updateEmail, updatingEmail, updateEmailError] = useUpdateEmail(auth);
+    const [user, loadingAuthState, authStateError] = useAuthState(auth);
+
+    let errorMessage;
 
     const { register, formState: { errors }, handleSubmit } = useForm();
 
-    const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(auth);
-
-    const actionCodeSettings = { url: "http://localhost:3000/login" };
-
-    const onsubmit = async (data) => {
-        const success = await sendPasswordResetEmail(
-            data.email,
-            actionCodeSettings
-        );
-        if (success) {
-            Swal.fire({
-                icon: "success",
-                title: 'Password Reset Email Sent Successfully !',
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonText: 'Home',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    navigate("/");
-                } else if (result.isDenied) {
-                    Swal.fire('Changes are not saved', '', 'info')
-                }
-            })
-        }
+    const updateNewEmail = (data) => {
+        updateEmail(data.email);
     }
 
-    let passwordResetErrorMessage;
-
-    if (error) {
-        passwordResetErrorMessage = <p className='text-red-500 text-sm'>{error.message}</p>
+    if (updateProfileError || updateEmailError || authStateError) {
+        errorMessage = <p className="py-1 text-sm text-red-500">{updateProfileError?.message || updateEmailError?.message || authStateError?.message}</p>
     }
 
-    if (sending) {
-        return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Processing</button></div>
+    if (updatingProfile || updatingEmail) {
+        return <LoadingSpinner text="Processing..." />
     }
-    
+
+
     return (
-        <div className=" px-4 lg:px-12 flex justify-center items-center h-screen">
+        <div className="px-4 lg:px-12 flex justify-center items-center h-screen">
             <div className="card w-96  shadow-xl">
                 <div className="card-body">
-                    <h2 className="text-center text-accent text-2xl">Recover Password</h2>
+                    <h2 className="text-center text-accent text-2xl">Update Email</h2>
                     {/* Login Form Starts */}
-                    <form onSubmit={handleSubmit(onsubmit)}>
-
+                    <form onSubmit={handleSubmit(updateNewEmail)}>
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
-                                <span className="label-text">Email</span>
+                                <span className="label-text">Current Email</span>
+                            </label>
+                            <input
+                                type="email"
+                                className="input input-bordered w-full max-w-xs"
+                                readOnly
+                                value={user?.email}
+                            />
+                        </div>
+                        <div className="form-control w-full max-w-xs">
+                            <label className="label">
+                                <span className="label-text">New Email</span>
                             </label>
                             <input
                                 type="email"
@@ -84,9 +75,10 @@ const ForgotPassword = () => {
                                 }
                             </label>
                         </div>
-                        {/* dynamic password reset error message */}
-                        {passwordResetErrorMessage}
-                        <input className='btn btn-accent w-full max-w-xs text-white' type="submit" value="Send Password Reset Email" />
+
+                        {/* dynamic google or email sign in error message */}
+                        {errorMessage}
+                        <input className='btn btn-accent w-full max-w-xs text-white' type="submit" value="Update Email" />
                     </form>
                 </div>
             </div>
@@ -94,4 +86,4 @@ const ForgotPassword = () => {
     );
 };
 
-export default ForgotPassword;
+export default Profile;
