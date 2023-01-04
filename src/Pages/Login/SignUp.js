@@ -31,10 +31,6 @@ const SignUp = () => {
         return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Processing</button></div>
     }
 
-    if (gUser || signUpUser) {
-        console.log(gUser || signUpUser);
-    }
-
     const onSubmit = async (data) => {
         await createUserWithEmailAndPassword(data.email, data.password);
         await updateProfile({ displayName: data.name });
@@ -136,7 +132,7 @@ const SignUp = () => {
                         <input className='btn btn-accent w-full max-w-xs text-white' type="submit" value="Sign Up" />
                     </form>
                     {/* Login Form Ends */}
-                    <p className='text-sm mt-2 text-center'>lready Have An Account? <Link className="text-secondary" to="/login">Please Login</Link></p>
+                    <p className='text-sm mt-2 text-center'>Already Have An Account? <Link className="text-secondary" to="/login">Please Login</Link></p>
                     <div className="divider">OR</div>
                     <button onClick={() => signInWithGoogle()} className="btn btn-outline btn-accent">Continue With Google</button>
                 </div>
