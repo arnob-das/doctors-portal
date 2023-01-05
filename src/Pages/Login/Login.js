@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth'
+import { useAuthState, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth'
 import auth from '../../firebase.init';
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -11,6 +11,7 @@ const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+    const [user] = useAuthState(auth);
 
 
     const [
@@ -124,12 +125,22 @@ const Login = () => {
                         </div>
                         {/* dynamic google or email sign in error message */}
                         {signInError}
-                        <input className='btn btn-accent w-full max-w-xs text-white' type="submit" value="Login" />
+                        <input
+                            className='btn btn-accent w-full max-w-xs text-white'
+                            type="submit"
+                            disabled={user}
+                            value="Login" />
                     </form>
                     {/* Login Form Ends */}
                     <p className='text-sm mt-2 text-center'>New To Doctors Portal? <Link className="text-secondary" to="/signup">Create New Account</Link></p>
                     <div className="divider">OR</div>
-                    <button onClick={() => signInWithGoogle()} className="btn btn-outline btn-accent">Continue With Google</button>
+                    <button
+                        onClick={() => signInWithGoogle()}
+                        className="btn btn-outline btn-accent"
+                        disabled={user}
+                    >
+                        Continue With Google
+                    </button>
                 </div>
             </div>
         </div>

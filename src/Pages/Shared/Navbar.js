@@ -1,16 +1,15 @@
 import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
+import { Link } from 'react-router-dom';
 import auth from '../../firebase.init';
-import { useSignOut } from 'react-firebase-hooks/auth';
 
 
 const Navbar = () => {
 
-    const [user, userLoading, userError] = useAuthState(auth);
+    //const [user, userLoading, userError] = useAuthState(auth);
+    const [user, userError] = useAuthState(auth);
     const [signOut, signOutLoading, signOutError] = useSignOut(auth);
 
-    const navigate = useNavigate();
 
     if (userError || signOutError) {
         return <p className='text-red-500 text-sm'>{userError?.message || signOutError?.message}</p>;
@@ -19,6 +18,7 @@ const Navbar = () => {
     if (signOutLoading) {
         return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Processing</button></div>
     }
+
 
 
     // it displays a loader while refreshing the page every time for a short time for the ""userLoading"" variable
@@ -40,7 +40,7 @@ const Navbar = () => {
         {
             user &&
             <li className="hover:bg-accent hover:text-white">
-                <Link to="/profile">{user?.displayName || "Profile"}</Link>
+                <Link className="font-bold text-accent hover:text-white" to="/profile">{user?.displayName || "Profile"}</Link>
             </li>
 
         }

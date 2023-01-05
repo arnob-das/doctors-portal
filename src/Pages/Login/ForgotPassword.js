@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
+import { useAuthState, useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -11,6 +11,7 @@ const ForgotPassword = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(auth);
+    const [user] = useAuthState(auth);
 
     const actionCodeSettings = { url: "http://localhost:3000/login" };
 
@@ -45,7 +46,7 @@ const ForgotPassword = () => {
     if (sending) {
         return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Processing</button></div>
     }
-    
+
     return (
         <div className=" px-4 lg:px-12 flex justify-center items-center h-screen">
             <div className="card w-96  shadow-xl">
@@ -86,7 +87,12 @@ const ForgotPassword = () => {
                         </div>
                         {/* dynamic password reset error message */}
                         {passwordResetErrorMessage}
-                        <input className='btn btn-accent w-full max-w-xs text-white' type="submit" value="Send Password Reset Email" />
+                        <input
+                            className='btn btn-accent w-full max-w-xs text-white'
+                            disabled={user}
+                            type="submit"
+                            value="Send Password Reset Email"
+                        />
                     </form>
                 </div>
             </div>
