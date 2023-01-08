@@ -26,7 +26,6 @@ const Navbar = () => {
     //     return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Processing</button></div>
     // }
 
-
     const logOut = async () => {
         await signOut(auth);
     }

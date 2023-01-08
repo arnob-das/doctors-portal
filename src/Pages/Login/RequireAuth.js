@@ -12,7 +12,7 @@ const RequireAuth = ({ children }) => {
         return <LoadingSpinner text="Processing..." />
     }
 
-    if(error){
+    if (error) {
         return <p className="text-center text-sm text-red-500">{error.message}</p>
     }
 

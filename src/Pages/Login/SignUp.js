@@ -1,5 +1,5 @@
-import React from 'react';
-import { useAuthState, useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth'
+import React, { useEffect } from 'react';
+import { useAuthState, useCreateUserWithEmailAndPassword, useSendEmailVerification, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth'
 import auth from '../../firebase.init';
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from 'react-router-dom';
@@ -12,37 +12,45 @@ const SignUp = () => {
 
     const [
         signInWithGoogle,
-        // gUser,
+        //gUser,
         gLoading,
         gError
     ] = useSignInWithGoogle(auth);
 
     const [
         createUserWithEmailAndPassword,
-        // signUpUser,
+        //signUpUser,
         signUpLoading,
         signUpError,
     ] = useCreateUserWithEmailAndPassword(auth);
 
-    const navigate = useNavigate();
+    const [sendEmailVerification, sendingVerificationEmail, verificationEmailSendingerror] = useSendEmailVerification(auth);
 
     const [updateProfile, updating, updateError] = useUpdateProfile(auth);
 
+    const navigate = useNavigate();
+
+
     let signInError;
 
-    if (gError || signUpError || updateError) {
-        signInError = <p className='text-red-500 text-sm'>{gError?.message || signUpError?.message || updateError?.message}</p>;
+    if (gError || signUpError || updateError || verificationEmailSendingerror) {
+        signInError = <p className='text-red-500 text-sm'>{gError?.message || signUpError?.message || updateError?.message || verificationEmailSendingerror?.message} </p>;
     }
 
-    if (gLoading || signUpLoading || updating) {
+    if (gLoading || signUpLoading || updating || sendingVerificationEmail) {
         return <div className="lg:my-20 flex"><button className="btn btn-primary loading mx-auto bg-gradient-to-r from-secondary bg-gradient-to-primary">Processing</button></div>
     }
 
     const onSubmit = async (data) => {
-        await createUserWithEmailAndPassword(data.email, data.password);
+        const success = await createUserWithEmailAndPassword(data.email, data.password);
         await updateProfile({ displayName: data.name });
-        await navigate("/appointment");
+        if (success) {
+            await sendEmailVerification();
+        }
+        navigate("/");
     };
+
+
 
     return (
         <div className=" px-4 lg:px-12 flex justify-center items-center h-screen">

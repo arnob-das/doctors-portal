@@ -11,8 +11,7 @@ const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
-    const [user] = useAuthState(auth);
-
+    const [user, authStateError] = useAuthState(auth);
 
     const [
         signInWithEmailAndPassword,
@@ -30,26 +29,21 @@ const Login = () => {
     useEffect(() => {
         if (gUser || eUser) {
             navigate(from, { replace: true });
-
         }
     }, [gUser, eUser, navigate, from, location])
 
 
-    if (gError || eError) {
-        signInError = <p className='text-red-500 text-sm'>{gError?.message || eError?.message}</p>;
+    if (gError || eError || authStateError) {
+        signInError = <p className='text-red-500 text-sm'>{gError?.message || eError?.message || authStateError?.message}</p>;
     }
 
     if (gLoading || eLoading) {
         return <LoadingSpinner text="Processing..." />
     }
 
-
-
     const onSubmit = async (data) => {
-        await signInWithEmailAndPassword(data.email, data.password);
+        signInWithEmailAndPassword(data.email, data.password);
     };
-
-
 
     return (
         <div className="px-4 lg:px-12 flex justify-center items-center h-screen">
